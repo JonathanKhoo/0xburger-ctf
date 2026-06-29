@@ -1,0 +1,474 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>0xburger ~ CTF Team</title>
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111;
+    --border: #2a2a2a;
+    --text: #c0c0c0;
+    --accent: #f59e0b;
+    --green: #4ade80;
+    --red: #ef4444;
+    --muted: #666;
+    --font: "Courier New", "Consolas", monospace;
+    --bun: #d4a857;
+    --patty: #5c3d2e;
+    --lettuce: #4ade80;
+    --cheese: #fbbf24;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Scanlines overlay */
+  body::after {
+    content: "";
+    position: fixed; top:0; left:0; right:0; bottom:0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px);
+    pointer-events: none; z-index: 999;
+  }
+
+  .container { max-width: 900px; margin: 0 auto; padding: 20px; width: 100%; }
+
+  /* Header */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 20px 0;
+    margin-bottom: 30px;
+    text-align: center;
+  }
+
+  .logo {
+    white-space: pre;
+    color: var(--bun);
+    font-size: 11px;
+    line-height: 1.15;
+    overflow-x: auto;
+    display: inline-block;
+    text-align: left;
+    margin-bottom: 10px;
+  }
+
+  .team-name {
+    font-size: 28px;
+    font-weight: bold;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px rgba(245,158,11,0.3);
+  }
+
+  .tagline {
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 4px;
+  }
+
+  /* Nav */
+  nav {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 12px;
+  }
+
+  nav a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 13px;
+    transition: color 0.2s;
+    cursor: pointer;
+  }
+  nav a:hover, nav a.active { color: var(--accent); }
+
+  /* Terminal card */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+
+  .card-header {
+    background: #1a1a1a;
+    border-bottom: 1px solid var(--border);
+    padding: 8px 14px;
+    font-size: 12px;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .card-header .dots { display: flex; gap: 6px; }
+  .card-header .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dot-red { background: var(--red); }
+  .dot-yellow { background: var(--cheese); }
+  .dot-green { background: var(--green); }
+
+  .card-body { padding: 16px; }
+
+  .prompt { color: var(--green); }
+  .prompt-user { color: var(--accent); }
+  .prompt-path { color: #60a5fa; }
+  .cursor { animation: blink 1s infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  /* Stats grid */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+  }
+
+  .stat-box {
+    background: #0f0f0f;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 14px;
+    text-align: center;
+  }
+  .stat-value { font-size: 22px; font-weight: bold; color: var(--accent); }
+  .stat-label { font-size: 11px; color: var(--muted); margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; }
+
+  /* Ranking bar */
+  .rank-bar {
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    margin-top: 6px;
+    overflow: hidden;
+  }
+  .rank-bar-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: width 0.6s;
+  }
+
+  /* Event list */
+  .event-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #1a1a1a;
+    font-size: 13px;
+  }
+  .event-row:last-child { border-bottom: none; }
+  .event-place { color: var(--accent); font-weight: bold; }
+  .event-name { flex: 1; margin: 0 12px; }
+  .event-date { color: var(--muted); font-size: 11px; }
+
+  /* Member grid */
+  .member-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 10px;
+  }
+
+  .member-chip {
+    background: #0f0f0f;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 10px;
+    text-align: center;
+    font-size: 12px;
+    transition: border-color 0.2s;
+  }
+  .member-chip:hover { border-color: var(--accent); }
+  .member-icon { font-size: 24px; margin-bottom: 4px; }
+
+  /* Burger divider */
+  .burger-divider {
+    text-align: center;
+    color: var(--bun);
+    margin: 24px 0;
+    font-size: 12px;
+    user-select: none;
+  }
+
+  /* Buttons */
+  .btn {
+    background: var(--surface);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 8px 16px;
+    font-family: var(--font);
+    font-size: 12px;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: all 0.2s;
+  }
+  .btn:hover { background: var(--accent); color: #000; }
+
+  /* Links */
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* Sections */
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* Footer */
+  footer {
+    margin-top: auto;
+    border-top: 1px solid var(--border);
+    padding: 20px 0;
+    text-align: center;
+    color: var(--muted);
+    font-size: 11px;
+  }
+
+  /* Mobile */
+  @media (max-width: 600px) {
+    .container { padding: 10px; }
+    .logo { font-size: 8px; }
+    .team-name { font-size: 22px; }
+    nav { gap: 12px; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .member-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <header>
+    <div class="logo">
+       .-'''''-.
+     .'         '.
+    /   .-"""-.   \
+   |   /       \   |
+   |  |  0   0 |  |
+   |  |    v   |  |
+   |   \  '-'  /   |
+    \   '.___.'   /
+     '.         .'
+       '-.....-'
+    ===============
+   ||  🍔 BURGER  ||
+   ||  STACK     ||
+   ===============
+  ──────────┬──────────
+   SEARED   │  MEDIUM
+   PATTY    │  RARE
+  ──────────┴──────────
+    </div>
+    <div class="team-name">0xburger</div>
+    <div class="tagline">[ we grill bytes, not beef ]</div>
+  </header>
+
+  <!-- Nav -->
+  <nav>
+    <a onclick="showSection('home')" class="active" id="nav-home">./home</a>
+    <a onclick="showSection('about')" id="nav-about">./about</a>
+    <a onclick="showSection('team')" id="nav-team">./team</a>
+    <a onclick="showSection('writeups')" id="nav-writeups">./writeups</a>
+    <a onclick="showSection('kitchen')" id="nav-kitchen">./kitchen</a>
+  </nav>
+
+  <!-- Home -->
+  <section id="home" class="section active">
+    <div class="card">
+      <div class="card-header">
+        <span class="dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></span>
+        <span>grill@0xburger:~$ ./status.sh</span>
+      </div>
+      <div class="card-body">
+        <p><span class="prompt">grill@0xburger</span>:<span class="prompt-path">~/ctf</span>$ <span class="prompt-user">whoami</span></p>
+        <p style="color:var(--accent); margin-bottom:14px;">0xburger CTF Team — flipping bits, searing exploits.</p>
+        <p><span class="prompt">grill@0xburger</span>:<span class="prompt-path">~/ctf</span>$ <span class="prompt-user">./grill_status</span></p>
+        <div class="stats-grid" id="stats-grid">
+          <div class="stat-box"><div class="stat-value" id="stat-rank">--</div><div class="stat-label">Malaysia Rank</div></div>
+          <div class="stat-box"><div class="stat-value" id="stat-global">--</div><div class="stat-label">Global Rank</div></div>
+          <div class="stat-box"><div class="stat-value" id="stat-points">--</div><div class="stat-label">CTFtime Points</div></div>
+          <div class="stat-box"><div class="stat-value" id="stat-events">--</div><div class="stat-label">Events Played</div></div>
+        </div>
+        <p style="font-size:11px;color:var(--muted);margin-top:8px;">(live data via CTFtime API)</p>
+      </div>
+    </div>
+
+    <div class="burger-divider">
+      ────── 🍔 ──────<br>
+      [ BUN ] [ PATTY ] [ CHEESE ] [ LETTUCE ] [ BUN ]
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span>terminal://kitchen.log</span></div>
+      <div class="card-body" id="recent-events" style="font-size:13px;">
+        <p style="color:var(--muted);">$ tail -f /var/log/kitchen.log</p>
+        <p style="color:var(--muted);">Loading recent competitions...</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about" class="section">
+    <div class="card">
+      <div class="card-header">
+        <span class="dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></span>
+        <span>cat README.md</span>
+      </div>
+      <div class="card-body">
+        <p style="color:var(--accent); font-size:18px; margin-bottom:12px;"># 0xburger</p>
+        <p>We''re a CTF team that treats every challenge like a burger — we break it down layer by layer until we get to the juicy exploit inside.</p>
+        <br>
+        <p><strong style="color:var(--bun);">The Stack:</strong></p>
+        <p>🍔 Top Bun — Recon & OSINT</p>
+        <p>🧀 Cheese — Crypto & Math</p>
+        <p>🥬 Lettuce — Web Exploitation</p>
+        <p>🥩 Patty — Binary & PWN (the meat)</p>
+        <p>🍔 Bottom Bun — Forensics & Misc</p>
+        <br>
+        <p><strong style="color:var(--accent);">Specialties:</strong> web, pwn, crypto, forensics, osint, rev</p>
+        <p><strong style="color:var(--accent);">Motto:</strong> "order up: one shell, extra crispy"</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Team -->
+  <section id="team" class="section">
+    <div class="card">
+      <div class="card-header">
+        <span class="dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></span>
+        <span>./kitchen_staff --list</span>
+      </div>
+      <div class="card-body">
+        <p style="margin-bottom:14px;"><span class="prompt">grill@0xburger</span>:<span class="prompt-path">~/team</span>$ <span class="prompt-user">ls crew/</span></p>
+        <div class="member-grid" id="member-grid">
+          <p style="color:var(--muted);">Loading crew from CTFtime...</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Writeups -->
+  <section id="writeups" class="section">
+    <div class="card">
+      <div class="card-header">
+        <span class="dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></span>
+        <span>ls ~/writeups/</span>
+      </div>
+      <div class="card-body">
+        <p><span class="prompt">grill@0xburger</span>:<span class="prompt-path">~/writeups</span>$ <span class="prompt-user">ls -la</span></p>
+        <br>
+        <p style="color:#f59e0b;">📝 Writeups coming soon — fresh patties on the grill.</p>
+        <p style="color:var(--muted); margin-top:8px;">Our chefs are documenting their recipes. Check back after our next CTF!</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Kitchen / Equipment -->
+  <section id="kitchen" class="section">
+    <div class="card">
+      <div class="card-header">
+        <span class="dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></span>
+        <span>cat kitchen/equipment.md</span>
+      </div>
+      <div class="card-body">
+        <p style="color:var(--accent); margin-bottom:12px;">🍳 Kitchen Tools:</p>
+        <p style="margin-bottom:6px;"><span style="color:var(--bun);">[Griddle]</span> — Ghidra / IDA (reversing station)</p>
+        <p style="margin-bottom:6px;"><span style="color:var(--green);">[Spatula]</span> — pwntools (binary flipping)</p>
+        <p style="margin-bottom:6px;"><span style="color:var(--cheese);">[Fryer]</span> — Burp Suite / Caido (web frying)</p>
+        <p style="margin-bottom:6px;"><span style="color:var(--red);">[Knife]</span> — Volatility / Wireshark (forensics slicing)</p>
+        <p style="margin-bottom:6px;"><span style="color:var(--accent);">[Thermometer]</span> — SageMath / Python (crypto temp checks)</p>
+        <p style="margin-bottom:6px;"><span style="color:var(--patty);">[Apron]</span> — Docker / QEMU (mess containment)</p>
+        <br>
+        <p style="color:var(--muted);">Every chef needs good tools. These are ours.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>0xburger CTF Team &copy; 2026</p>
+    <p style="margin-top:4px;">🍔 flipping bits since 2̶0̶2̶6̶ whenever we started</p>
+  </footer>
+
+</div>
+
+<script>
+// CTFtime team ID — replace with your actual team ID
+// Get it from https://ctftime.org/team/YOUR_ID
+const CTFTIME_TEAM_ID = null; // Set your team ID here after creating on ctftime.org
+
+// Navigation
+function showSection(name) {
+  document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+  document.querySelectorAll("nav a").forEach(a => a.classList.remove("active"));
+  document.getElementById(name).classList.add("active");
+  document.getElementById("nav-" + name).classList.add("active");
+}
+
+// Fetch CTFtime data
+async function fetchCtftime() {
+  if (!CTFTIME_TEAM_ID) {
+    document.getElementById("stats-grid").innerHTML =
+      `<p style="color:var(--muted); grid-column:1/-1; text-align:center;">
+        > Set your CTFtime team ID in the script to unlock live stats.
+        > <a href="https://ctftime.org/" target="_blank">Create a team on CTFtime</a> first!
+      </p>`;
+    return;
+  }
+
+  try {
+    const resp = await fetch(`https://ctftime.org/api/v1/teams/${CTFTIME_TEAM_ID}/`);
+    if (!resp.ok) throw new Error("API down");
+    const data = await resp.json();
+
+    // Stats
+    const rating = (await fetch(`https://ctftime.org/api/v1/teams/${CTFTIME_TEAM_ID}/`).then(r => r.json()));
+    document.getElementById("stat-rank").textContent = rating.rating?.country_place || "--";
+    document.getElementById("stat-global").textContent = rating.rating?.["2026"]?.rating_place || "--";
+    document.getElementById("stat-points").textContent = rating.rating?.["2026"]?.rating_points?.toFixed(2) || "--";
+    document.getElementById("stat-events").textContent = rating.rating?.["2026"]?.rating_events || "--";
+
+    // Members
+    if (data.members) {
+      const grid = document.getElementById("member-grid");
+      const icons = ["🍔","🧀","🥬","🥩","🍟","🥤","🍳","🔥"];
+      grid.innerHTML = data.members.map((m, i) =>
+        `<div class="member-chip">
+          <div class="member-icon">${icons[i % icons.length]}</div>
+          <div>${m.name || m}</div>
+        </div>`
+      ).join("");
+    }
+  } catch (e) {
+    console.log("CTFtime fetch failed:", e);
+    document.getElementById("stats-grid").innerHTML =
+      `<p style="color:var(--accent); grid-column:1/-1; text-align:center;">> CTFtime API unreachable. Stats will load when online.</p>`;
+  }
+}
+
+fetchCtftime();
+
+// Typewriter effect on load
+const prompts = document.querySelectorAll(".prompt-user");
+let delay = 300;
+prompts.forEach((el, i) => {
+  el.style.opacity = "0";
+  setTimeout(() => { el.style.transition = "opacity 0.3s"; el.style.opacity = "1"; }, delay + i * 200);
+});
+</script>
+</body>
+</html>
