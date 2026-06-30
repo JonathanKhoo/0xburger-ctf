@@ -40,7 +40,7 @@ nav button.active::after{width:60%}
 .section{display:none;animation:sectionIn .4s ease}
 .section.active{display:block}
 @keyframes sectionIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-.terminal{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:0 0 30px rgba(0,0,0,.4),0 0 80px rgba(245,158,11,.02),inset 0 1px 0 rgba(255,255,255,.01);margin-bottom:18px;transition:box-shadow .4s,border-color .4s}
+.terminal{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;position:relative;box-shadow:0 0 30px rgba(0,0,0,.4),0 0 80px rgba(245,158,11,.02),inset 0 1px 0 rgba(255,255,255,.01);margin-bottom:18px;transition:box-shadow .4s,border-color .4s}
 .terminal:hover{border-color:var(--border2);box-shadow:0 0 40px rgba(0,0,0,.45),0 0 90px rgba(245,158,11,.04),inset 0 1px 0 rgba(255,255,255,.01)}
 .term-header{background:#080810;border-bottom:1px solid var(--border);padding:10px 14px;display:flex;align-items:center;gap:12px;font-size:10.5px;color:var(--dim);user-select:none}
 .term-dots{display:flex;gap:7px}
@@ -54,7 +54,7 @@ nav button.active::after{width:60%}
 .term-body::-webkit-scrollbar-track{background:transparent}
 .term-body::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
 .prompt-line{margin-bottom:2px;display:flex;align-items:flex-start;gap:6px;flex-wrap:wrap;animation:lineSlide .25s ease-out}
-@keyframes lineSlide{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:translateX(0)}}
+@keyframes lineSlide{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:translateX(0)}}@keyframes cursorBlink{0%,100%{opacity:1}50%{opacity:0}}.term-cursor{width:8px;height:14px;background:var(--accent);animation:cursorBlink 1s step-end infinite;position:absolute;bottom:14px;left:16px}
 .prompt-sign{color:var(--green2);flex-shrink:0}
 .prompt-user{color:var(--accent);font-weight:600}
 .prompt-at{color:var(--dim)}.prompt-path{color:var(--blue)}
@@ -110,6 +110,12 @@ nav button.active::after{width:60%}
 .writeup-info .meta{font-size:10px;color:var(--dim);letter-spacing:.5px;margin-top:2px}
 .confetti-piece{position:fixed;z-index:10001;pointer-events:none;animation:confettiFall 1.4s ease-out forwards}
 @keyframes confettiFall{0%{opacity:1;transform:translateY(0) rotate(0deg) scale(1)}80%{opacity:1}100%{opacity:0;transform:translateY(100vh) rotate(720deg) scale(.3)}}
+@keyframes revealUp{from{opacity:0;transform:translateY(32px)}to{opacity:1;transform:translateY(0)}}
+@keyframes revealScale{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
+.reveal{opacity:0}
+.reveal.visible{animation:revealUp .6s cubic-bezier(.22,1,.36,1) forwards}
+.reveal-scale{opacity:0}
+.reveal-scale.visible{animation:revealScale .5s cubic-bezier(.22,1,.36,1) forwards}
 .sound-toggle{position:fixed;bottom:16px;right:16px;z-index:10000;background:var(--card);border:1px solid var(--border);color:var(--dim);font-family:var(--font);font-size:16px;width:40px;height:40px;border-radius:50%;cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center}
 .sound-toggle:hover{color:var(--text);border-color:var(--border2);transform:scale(1.1)}
 .sound-toggle:active{transform:scale(.9)}
@@ -141,6 +147,7 @@ footer span.accent{color:var(--accent)}
 <button data-section="crew">./crew</button>
 <button data-section="kitchen">./kitchen</button>
 <button data-section="writeups">./writeups</button>
+<div class="nav-slider"></div>
 </nav>
 <section class="section active" id="sec-home">
 <div class="terminal">
@@ -153,6 +160,7 @@ footer span.accent{color:var(--accent)}
 <div class="term-title">grill@0xburger:~</div>
 </div>
 <div class="term-body" id="terminal"></div>
+<div class="term-cursor" id="termCursor"></div>
 </div>
 <div class="cmd-bar">
 <button class="cmd-btn" onclick="runCmd('./menu')">./menu</button>
@@ -164,7 +172,7 @@ footer span.accent{color:var(--accent)}
 <button class="cmd-btn clear" onclick="runCmd('./clear')">./clear</button>
 <button class="cmd-btn replay" onclick="runDemo()">\u27F3 replay</button>
 </div>
-<div class="stat-grid">
+<div class="stat-grid reveal">
 <div class="stat-card" data-tilt onclick="animateStat(this)">
 <div class="stat-num loading" id="stat-rank">...</div>
 <div class="stat-label">country rank</div>
@@ -189,7 +197,7 @@ footer span.accent{color:var(--accent)}
 </section>
 <section class="section" id="sec-about">
 <div style="margin-bottom:24px;text-align:center">
-<div class="burger-stack" onclick="burgerClick()">
+<div class="burger-stack reveal-scale" onclick="burgerClick()">
 <div class="burger-layer bun-top">🍔 TOP BUN</div>
 <div class="burger-layer cheese">🧀 CHEESE \u2014 crypto</div>
 <div class="burger-layer lettuce">🥬 LETTUCE \u2014 reverse</div>
@@ -199,7 +207,7 @@ footer span.accent{color:var(--accent)}
 </div>
 <div class="burger-tooltip">click the stack to taste each layer</div>
 </div>
-<div class="card" style="text-align:center;padding:24px 20px">
+<div class="card reveal-scale" style="text-align:center;padding:24px 20px">
 <h3>🍔 Grill Manifesto</h3>
 <div class="desc" style="margin-top:10px;line-height:1.8">
 0xburger is a CTF team that flips bits like patties.
@@ -211,7 +219,7 @@ footer span.accent{color:var(--accent)}
 </div>
 </section>
 <section class="section" id="sec-crew">
-<div class="card-grid">
+<div class="card-grid reveal">
 <div class="card crew-card" onclick="toast('Captain ImJhan — leading the grill','info')">
 <div class="crew-avatar">🍔</div>
 <h3>head chef</h3>
@@ -233,7 +241,7 @@ footer span.accent{color:var(--accent)}
 </div>
 </section>
 <section class="section" id="sec-kitchen">
-<div class="stat-grid">
+<div class="stat-grid reveal">
 <div class="stat-card" data-tilt onclick="animateStat(this)">
 <div class="stat-num" style="color:var(--green2)">x86_64</div>
 <div class="stat-label">arch</div>
@@ -255,7 +263,7 @@ footer span.accent{color:var(--accent)}
 <div class="stat-bar"><div class="stat-bar-fill" style="width:75%;background:linear-gradient(90deg,var(--accent2),var(--accent))"></div></div>
 </div>
 </div>
-<div class="card" style="text-align:center;padding:24px 20px">
+<div class="card reveal-scale" style="text-align:center;padding:24px 20px">
 <h3>🔧 Our Stack</h3>
 <div class="desc" style="margin-top:8px">
 <span style="color:var(--accent)">Python</span> /
@@ -300,9 +308,11 @@ function toast(msg,type){type=type||'info';const c=document.getElementById('toas
 // ===== PARTICLES =====
 (function(){
 const canvas=document.getElementById('particle-canvas'),ctx=canvas.getContext('2d');
-let particles=[],w,h;
+let particles=[],w,h,mx=-999,my=-999;
 function resize(){w=canvas.width=window.innerWidth;h=canvas.height=document.documentElement.scrollHeight}
-class Particle{constructor(){this.reset()}reset(){this.x=Math.random()*w;this.y=Math.random()*h;this.vx=(Math.random()-.5)*.4;this.vy=(Math.random()-.5)*.4;this.size=Math.random()*1.8+.6;this.alpha=Math.random()*.4+.1}update(){this.x+=this.vx;this.y+=this.vy;if(this.x<-20)this.x=w+20;if(this.x>w+20)this.x=-20;if(this.y<-20)this.y=h+20;if(this.y>h+20)this.y=-20}draw(){ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fillStyle='rgba(245,158,11,'+this.alpha+')';ctx.fill()}}
+document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY});
+document.addEventListener('mouseleave',function(){mx=-999;my=-999});
+class Particle{constructor(){this.reset()}reset(){this.x=Math.random()*w;this.y=Math.random()*h;this.vx=(Math.random()-.5)*.4;this.vy=(Math.random()-.5)*.4;this.size=Math.random()*1.8+.6;this.alpha=Math.random()*.4+.1}update(){var dx=mx-this.x,dy=my-this.y,dist=Math.sqrt(dx*dx+dy*dy);if(dist<200&&mx>-900){var force=(1-dist/200)*.15;this.vx+=dx/dist*force;this.vy+=dy/dist*force}this.vx*=0.98;this.vy*=0.98;this.x+=this.vx;this.y+=this.vy;if(this.x<-20)this.x=w+20;if(this.x>w+20)this.x=-20;if(this.y<-20)this.y=h+20;if(this.y>h+20)this.y=-20}draw(){ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fillStyle='rgba(245,158,11,'+this.alpha+')';ctx.fill()}}
 const count=55;for(let i=0;i<count;i++)particles.push(new Particle());
 function animate(){ctx.clearRect(0,0,w,h);for(let i=0;i<particles.length;i++){for(let j=i+1;j<particles.length;j++){const dx=particles[i].x-particles[j].x,dy=particles[i].y-particles[j].y,dist=Math.sqrt(dx*dx+dy*dy);if(dist<120){ctx.beginPath();ctx.moveTo(particles[i].x,particles[i].y);ctx.lineTo(particles[j].x,particles[j].y);ctx.strokeStyle='rgba(245,158,11,'+(.04*(1-dist/120))+')';ctx.lineWidth=.5;ctx.stroke()}}}particles.forEach(function(p){p.update();p.draw()});requestAnimationFrame(animate)}
 resize();animate();window.addEventListener('resize',resize)
@@ -315,9 +325,13 @@ card.addEventListener('mouseleave',function(){card.style.transform='';card.style
 });
 
 // ===== NAV =====
+var navSlider=document.querySelector('.nav-slider'),navEl=document.querySelector('nav');
+function moveSlider(btn){var nr=navEl.getBoundingClientRect(),br=btn.getBoundingClientRect();navSlider.style.left=(br.left-nr.left)+'px';navSlider.style.width=br.width+'px'}
+moveSlider(document.querySelector('nav button.active'));
 document.querySelectorAll('nav button').forEach(function(btn){
-btn.addEventListener('click',function(){playClick();document.querySelectorAll('nav button').forEach(function(b){b.classList.remove('active')});btn.classList.add('active');document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active')});document.getElementById('sec-'+btn.dataset.section).classList.add('active')})
+btn.addEventListener('click',function(){playClick();document.querySelectorAll('nav button').forEach(function(b){b.classList.remove('active')});btn.classList.add('active');moveSlider(btn);document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active')});document.getElementById('sec-'+btn.dataset.section).classList.add('active')})
 });
+window.addEventListener('resize',function(){var a=document.querySelector('nav button.active');if(a)moveSlider(a)});
 
 // ===== GLITCH =====
 function logoGlitch(){playClick();const logo=document.getElementById('burgerLogo');logo.classList.add('glitching');setTimeout(function(){logo.classList.remove('glitching')},150);const msgs=['patties grilling...','flipping bits...','\u{1F525} order up!','seasoning bytes...','burgerOS online'];toast(msgs[Math.floor(Math.random()*msgs.length)],'info')}
@@ -356,8 +370,18 @@ function sleep(ms){return new Promise(function(r){setTimeout(r,ms)})}
 // ===== CONFETTI =====
 function spawnConfetti(){var colors=['#f59e0b','#fbbf24','#22c55e','#ef4444','#60a5fa','#e8b84b','#fcd34d'];for(var i=0;i<40;i++){var el=document.createElement('div');el.className='confetti-piece';el.style.left=(Math.random()*90+5)+'%';el.style.top=-(Math.random()*20+5)+'px';el.style.width=(Math.random()*8+4)+'px';el.style.height=(Math.random()*8+4)+'px';el.style.background=colors[Math.floor(Math.random()*colors.length)];el.style.borderRadius=Math.random()>.5?'50%':'2px';el.style.animationDuration=(Math.random()*1+1)+'s';el.style.animationDelay=(Math.random()*.3)+'s';document.body.appendChild(el);setTimeout(function(){el.remove()},2000)}}
 
+// ===== SCROLL REVEAL =====
+var revealObserver=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');revealObserver.unobserve(e.target);if(e.target.querySelector('#stat-rank')||e.target.closest('#sec-home')){setTimeout(animateStats,200)}}})},{threshold:.12,rootMargin:'0px 0px -30px 0px'});
+document.querySelectorAll('.reveal,.reveal-scale').forEach(function(el){revealObserver.observe(el)});
+
 // ===== BOOT =====
 setTimeout(runDemo,600);
+
+// ===== COUNTER ANIMATION =====
+function countUp(el,target,dur){var s=parseFloat(el.textContent.replace(/[^0-9.]/g,''))||0,start=s,startTime=null;function step(ts){if(!startTime)startTime=ts;var p=Math.min((ts-startTime)/dur,1),ease=1-Math.pow(1-p,3),v=start+(target-start)*ease;el.textContent=el.textContent.match(/^[^0-9]*/)?el.textContent.match(/^[^0-9]*/)[0]:'')+ (Number.isInteger(target)?Math.round(v):v.toFixed(2));if(p<1)requestAnimationFrame(step)}requestAnimationFrame(step)}
+function animateStats(){if(document.getElementById('stat-rank').classList.contains('animated'))return;document.getElementById('stat-rank').classList.add('animated');countUp(document.getElementById('stat-rank'),128,1200);countUp(document.getElementById('stat-global'),847,1400);countUp(document.getElementById('stat-points'),42.57,1100);countUp(document.getElementById('stat-events'),6,900);setTimeout(function(){document.getElementById('bar-rank').style.width='65%';document.getElementById('bar-global').style.width='58%';document.getElementById('bar-points').style.width='42%';document.getElementById('bar-events').style.width='38%'},600)}
+// Set placeholders
+(function(){document.getElementById('stat-rank').textContent='#';document.getElementById('stat-global').textContent='#';document.getElementById('stat-points').textContent='0.00';document.getElementById('stat-events').textContent='0'})();
 
 // ===== CTFTIME =====
 var CTFTIME_TEAM_ID=null;
