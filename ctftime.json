@@ -1,61 +1,7 @@
-﻿{
-    "academic":  false,
-    "primary_alias":  "0xBURGER",
-    "name":  "0xBURGER",
-    "rating":  {
-                   "2016":  {
-                                "country_place":  1
-                            },
-                   "2017":  {
-
-                            },
-                   "2018":  {
-
-                            },
-                   "2019":  {
-                                "country_place":  1
-                            },
-                   "2020":  {
-                                "country_place":  3
-                            },
-                   "2021":  {
-                                "country_place":  3
-                            },
-                   "2022":  {
-                                "country_place":  2
-                            },
-                   "2023":  {
-                                "country_place":  2
-                            },
-                   "2024":  {
-                                "country_place":  8
-                            },
-                   "2025":  {
-                                "country_place":  6
-                            },
-                   "2026":  {
-                                "country_place":  9
-                            },
-                   "2011":  {
-
-                            },
-                   "2012":  {
-                                "country_place":  2
-                            },
-                   "2013":  {
-                                "country_place":  2
-                            },
-                   "2014":  {
-
-                            },
-                   "2015":  {
-                                "country_place":  1
-                            }
-               },
-    "logo":  "",
-    "country":  "MY",
-    "id":  440041,
-    "aliases":  [
-
-                ]
-}
+<html>
+<head><title>403 Forbidden</title></head>
+<body>
+<center><h1>403 Forbidden</h1></center>
+<hr><center>nginx</center>
+</body>
+</html>
