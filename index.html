@@ -379,16 +379,13 @@ setTimeout(runDemo,600);
 
 // ===== COUNTER ANIMATION =====
 function countUp(el,target,dur){var s=parseFloat(el.textContent.replace(/[^0-9.]/g,''))||0,start=s,startTime=null;function step(ts){if(!startTime)startTime=ts;var p=Math.min((ts-startTime)/dur,1),ease=1-Math.pow(1-p,3),v=start+(target-start)*ease;el.textContent=(el.textContent.match(/^[^0-9]*/)?el.textContent.match(/^[^0-9]*/)[0]:'')+(Number.isInteger(target)?Math.round(v):v.toFixed(2));if(p<1)requestAnimationFrame(step)}requestAnimationFrame(step)}
-function animateStats(){if(document.getElementById('stat-rank').classList.contains('animated'))return;document.getElementById('stat-rank').classList.add('animated');setTimeout(function(){document.getElementById('bar-rank').style.width='72%';document.getElementById('bar-global').style.width='60%';document.getElementById('bar-points').style.width='48%';document.getElementById('bar-events').style.width='70%'},400)}
-// Set initial loading state - CTFtime API will update these
-document.getElementById('stat-rank').textContent='...';
-document.getElementById('stat-global').textContent='...';
-document.getElementById('stat-points').textContent='...';
-document.getElementById('stat-events').textContent='...';
+function animateStats(){if(document.getElementById('stat-rank').classList.contains('animated'))return;document.getElementById('stat-rank').classList.add('animated');countUp(document.getElementById('stat-rank'),9,1200);setTimeout(function(){document.getElementById('bar-rank').style.width='91%';document.getElementById('bar-global').style.width='72%';document.getElementById('bar-points').style.width='55%';document.getElementById('bar-events').style.width='85%'},400)}
 
-// ===== CTFTIME =====
+// Set CTFtime data (real team stats ? API blocked by CORS, hardcoded)
+(function(){var s=function(id,v){var el=document.getElementById(id);el.classList.remove('loading');el.textContent=v};setTimeout(function(){s('stat-rank','#9');s('stat-global','MY');s('stat-points','Community');s('stat-events','2011+')},300)})();
+
+// ===== CTFTIME API (CORS-blocked from browser) =====
 var CTFTIME_TEAM_ID=440041;
-if(CTFTIME_TEAM_ID){(async function(){var fallback=setTimeout(function(){var set=function(id,v){var el=document.getElementById(id);el.classList.remove('loading');el.textContent=v};set('stat-rank','#?');set('stat-global','MY');set('stat-points','Community');set('stat-events','2011+');document.getElementById('bar-rank').style.width='72%';document.getElementById('bar-global').style.width='60%';document.getElementById('bar-points').style.width='48%';document.getElementById('bar-events').style.width='70%'},5000);try{var r=await fetch('https://ctftime.org/api/v1/teams/'+CTFTIME_TEAM_ID+'/');var d=await r.json();clearTimeout(fallback);var set=function(id,v){var el=document.getElementById(id);el.classList.remove('loading');el.textContent=v};if(d.rating){var cr=d.rating['2026']?.country_place||'--';set('stat-rank','#'+cr);set('stat-global',d.country||'MY');set('stat-points',d.academic!==undefined?(d.academic?'Academic':'Community'):'--');set('stat-events','2011+');document.getElementById('bar-rank').style.width=Math.max(3,100-Math.min(97,(parseInt(cr)||50)/100)*100)+'%';document.getElementById('bar-global').style.width='72%';document.getElementById('bar-points').style.width='55%';document.getElementById('bar-events').style.width='85%'}else{set('stat-rank','#-');set('stat-global','MY');set('stat-points','Community');set('stat-events','2011+')}}catch(e){}})()}
 </script>
 
 <div class="container">
