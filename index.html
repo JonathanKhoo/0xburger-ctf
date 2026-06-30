@@ -381,10 +381,8 @@ setTimeout(runDemo,600);
 function countUp(el,target,dur){var s=parseFloat(el.textContent.replace(/[^0-9.]/g,''))||0,start=s,startTime=null;function step(ts){if(!startTime)startTime=ts;var p=Math.min((ts-startTime)/dur,1),ease=1-Math.pow(1-p,3),v=start+(target-start)*ease;el.textContent=(el.textContent.match(/^[^0-9]*/)?el.textContent.match(/^[^0-9]*/)[0]:'')+(Number.isInteger(target)?Math.round(v):v.toFixed(2));if(p<1)requestAnimationFrame(step)}requestAnimationFrame(step)}
 function animateStats(){if(document.getElementById('stat-rank').classList.contains('animated'))return;document.getElementById('stat-rank').classList.add('animated');countUp(document.getElementById('stat-rank'),9,1200);setTimeout(function(){document.getElementById('bar-rank').style.width='91%';document.getElementById('bar-global').style.width='72%';document.getElementById('bar-points').style.width='55%';document.getElementById('bar-events').style.width='85%'},400)}
 
-// Set CTFtime data (real team stats ? API blocked by CORS, hardcoded)
-(function(){var s=function(id,v){var el=document.getElementById(id);el.classList.remove('loading');el.textContent=v};setTimeout(function(){s('stat-rank','#9');s('stat-global','MY');s('stat-points','Community');s('stat-events','2011+')},300)})();
-
-// ===== CTFTIME API (CORS-blocked from browser) =====
+// ===== CTFTIME LIVE DATA =====
+(async function(){var s=function(id,v){var el=document.getElementById(id);el.classList.remove('loading');el.textContent=v};try{var r=await fetch('ctftime.json');var d=await r.json();var cr=d.rating&&d.rating['2026']&&d.rating['2026'].country_place;if(cr){s('stat-rank','#'+cr);s('stat-global',d.country||'MY');s('stat-points',d.academic!==undefined?(d.academic?'Academic':'Community'):'Community');s('stat-events','2011+');animateStats()}else{s('stat-rank','#');s('stat-global',d.country||'MY');s('stat-points','Community');s('stat-events','2011+')}}catch(e){s('stat-rank','#?');s('stat-global','MY');s('stat-points','Community');s('stat-events','2011+')}})();
 var CTFTIME_TEAM_ID=440041;
 </script>
 
