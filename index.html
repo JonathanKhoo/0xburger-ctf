@@ -180,17 +180,17 @@ footer span.accent{color:var(--accent)}
 </div>
 <div class="stat-card" data-tilt onclick="animateStat(this)">
 <div class="stat-num loading" id="stat-global">...</div>
-<div class="stat-label">global rank</div>
+<div class="stat-label">country</div>
 <div class="stat-bar"><div class="stat-bar-fill" id="bar-global"></div></div>
 </div>
 <div class="stat-card" data-tilt onclick="animateStat(this)">
 <div class="stat-num loading" id="stat-points">...</div>
-<div class="stat-label">ctf points</div>
+<div class="stat-label">team type</div>
 <div class="stat-bar"><div class="stat-bar-fill" id="bar-points"></div></div>
 </div>
 <div class="stat-card" data-tilt onclick="animateStat(this)">
 <div class="stat-num loading" id="stat-events">...</div>
-<div class="stat-label">events</div>
+<div class="stat-label">since</div>
 <div class="stat-bar"><div class="stat-bar-fill" id="bar-events"></div></div>
 </div>
 </div>
@@ -384,8 +384,8 @@ function animateStats(){if(document.getElementById('stat-rank').classList.contai
 (function(){document.getElementById('stat-rank').textContent='#';document.getElementById('stat-global').textContent='#';document.getElementById('stat-points').textContent='0.00';document.getElementById('stat-events').textContent='0'})();
 
 // ===== CTFTIME =====
-var CTFTIME_TEAM_ID=null;
-if(CTFTIME_TEAM_ID){(async function(){try{var r=await fetch('https://ctftime.org/api/v1/teams/'+CTFTIME_TEAM_ID+'/');var d=await r.json();var set=function(id,v){var el=document.getElementById(id);el.classList.remove('loading');el.textContent=v};if(d.rating){var cr=d.rating.country_place||'--';set('stat-rank','#'+cr);var gr=d.rating['2026']?.rating_place||'--';set('stat-global','#'+gr);set('stat-points',(d.rating['2026']?.rating_points||0).toFixed(2));set('stat-events',d.rating['2026']?.rating_events||'0');document.getElementById('bar-rank').style.width=Math.max(3,100-Math.min(97,(cr/800)*100))+'%';document.getElementById('bar-global').style.width=Math.max(3,100-Math.min(97,(gr/3000)*100))+'%';document.getElementById('bar-points').style.width=Math.min(100,((d.rating['2026']?.rating_points||0)/500)*100)+'%';document.getElementById('bar-events').style.width=Math.min(100,((d.rating['2026']?.rating_events||0)/30)*100)+'%'}}catch(e){}})()}
+var CTFTIME_TEAM_ID=440041;
+if(CTFTIME_TEAM_ID){(async function(){try{var r=await fetch('https://ctftime.org/api/v1/teams/'+CTFTIME_TEAM_ID+'/');var d=await r.json();var set=function(id,v){var el=document.getElementById(id);el.classList.remove('loading');el.textContent=v};if(d.rating){var cr=d.rating['2026']?.country_place||'--';set('stat-rank','#'+cr);set('stat-global',d.country||'MY');set('stat-points',d.academic!==undefined?(d.academic?'Academic':'Community'):'--');set('stat-events','2011+');document.getElementById('bar-rank').style.width=Math.max(3,100-Math.min(97,(parseInt(cr)||50)/100)*100)+'%';document.getElementById('bar-global').style.width='72%';document.getElementById('bar-points').style.width='55%';document.getElementById('bar-events').style.width='85%'}else{set('stat-rank','#');set('stat-global','--');set('stat-points','--');set('stat-events','--')}}catch(e){}})()}
 </script>
 
 <div class="container">
