@@ -291,13 +291,8 @@ footer span.accent{color:var(--accent)}
 
 </div>
 <button class="sound-toggle" id="soundToggle" onclick="toggleSound()" title="toggle sound">🔇</button>
-<button class="admin-btn" id="adminBtn" onclick="var o=document.getElementById('adminOverlay');o.style.cssText='display:flex;z-index:100002;position:fixed;inset:0;background:rgba(6,6,13,.95)';o.classList.add('show');handleAdminClick()" title="admin">🔑</button>
-<div class="admin-overlay" id="adminOverlay" onclick="if(event.target===this)closeAdmin()">
-<div class="admin-modal">
-<div class="admin-head">
-<h3>🔐 Admin</h3>
-<button class="admin-close" onclick="closeAdmin()">✕</button>
-</div>
+<button class="admin-btn" id="adminBtn" onclick="handleAdminClick()" title="admin">🔑</button>
+<div class="admin-panel" id="adminPanel" style="display:none">
 <div class="admin-tabs">
 <button class="admin-tab active" id="tabSignin" onclick="switchTab('signin')">Sign In</button>
 <button class="admin-tab" id="tabSignup" onclick="switchTab('signup')">Create Account</button>
@@ -313,7 +308,6 @@ footer span.accent{color:var(--accent)}
 <span class="admin-spinner"></span>
 </button>
 <div class="admin-msg" id="adminMsg"></div>
-</div>
 </div>
 </div>
 <div class="edit-bar" id="editBar">
@@ -421,8 +415,8 @@ var CTFTIME_TEAM_ID=440041;
 var SUPABASE_URL='https://srabdolyckacsxmyiwuv.supabase.co',SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNyYWJkb2x5Y2thY3N4bXlpd3V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI3OTU1NzgsImV4cCI6MjA5ODM3MTU3OH0.YiRNAvouekflAoHoD6NgeOOGFUDJWJnD5ahD51dhrn0';
 var sb=null,sbReady=false,adminMode=false,authMode='signin';
 function ensureSB(){if(sbReady)return true;if(typeof supabase==='undefined')return false;try{sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY,{auth:{persistSession:true,storageKey:'0xburger_auth',detectSessionInUrl:false}});sbReady=true;return true}catch(e){return false}}
-function showOverlay(){var o=document.getElementById('adminOverlay');if(!o)return;o.classList.add('show');o.style.display='flex'}
-function closeAdmin(){var o=document.getElementById('adminOverlay');if(o){o.classList.remove('show');o.style.display=''};setMsg('')}
+function showOverlay(){var o=document.getElementById('adminPanel');if(!o)return;o.style.display='block';document.getElementById('adminEmail')&&document.getElementById('adminEmail').focus()}
+function closeAdmin(){var o=document.getElementById('adminPanel');if(o)o.style.display='none';setMsg('')}
 function setMsg(t,type){var m=document.getElementById('adminMsg');if(m){m.textContent=t;m.className='admin-msg '+(type||'')}}
 async function handleAdminClick(){showOverlay();setMsg('connecting\u2026','info');if(!ensureSB()){for(var i=0;i<30;i++){if(ensureSB())break;await new Promise(function(r){setTimeout(r,200)})}}if(!ensureSB()){setMsg('Cannot reach Supabase. Check your connection or ad blocker.','error');return}try{var s=await sb.auth.getSession();if(s.data.session){enterEditMode();return}}catch(e){}authMode='signin';switchTab('signin');document.getElementById('adminEmail').value='';document.getElementById('adminPass').value='';setMsg('');document.getElementById('adminEmail').focus()}
 function switchTab(mode){authMode=mode;document.getElementById('tabSignin').classList.toggle('active',mode==='signin');document.getElementById('tabSignup').classList.toggle('active',mode==='signup');document.getElementById('authBtn').querySelector('.admin-label').textContent=mode==='signin'?'Sign In':'Create Account';setMsg('')}
