@@ -291,7 +291,7 @@ footer span.accent{color:var(--accent)}
 
 </div>
 <button class="sound-toggle" id="soundToggle" onclick="toggleSound()" title="toggle sound">🔇</button>
-<button class="admin-btn" id="adminBtn" onclick="handleAdminClick()" title="admin">🔑</button>
+<button class="admin-btn" id="adminBtn" onclick="(function(){var o=document.getElementById('adminOverlay');o.style.display='flex';o.classList.add('show');handleAdminClick()})()" title="admin">🔑</button>
 <div class="admin-overlay" id="adminOverlay" onclick="if(event.target===this)closeAdmin()">
 <div class="admin-modal">
 <div class="admin-head">
