@@ -212,25 +212,23 @@ footer span.accent{color:var(--accent)}
 </section>
 <section class="section" id="sec-crew">
 <div class="card-grid">
-<div class="card" onclick="toast('head chef: season every byte','info')">
-<h3>🍔 head chef</h3>
-<div class="role">captain / pwn</div>
-<div class="desc">Seasoned binary exploiter. Once ROP-chained a toaster.</div>
+<div class="card crew-card" onclick="toast('Captain ImJhan — leading the grill','info')">
+<div class="crew-avatar">🍔</div>
+<h3>head chef</h3>
+<div class="role">ImJhan — Captain</div>
+<div class="desc">Binary exploitation specialist. ROP chains for breakfast, heap feng shui for dinner. Leads the team into battle.</div>
 </div>
-<div class="card" onclick="toast('sous chef: crypto master','info')">
-<h3>🧀 sous chef</h3>
-<div class="role">crypto / math</div>
-<div class="desc">Breaks RSA before breakfast. Lattices fear them.</div>
+<div class="card crew-card" onclick="toast('Sargent Low Nam Lee — crypto &amp; recon','info')">
+<div class="crew-avatar">🧀</div>
+<h3>sous chef</h3>
+<div class="role">Low Nam Lee — Sargent</div>
+<div class="desc">Crypto breaker and OSINT scout. Finds flags where no one else looks. The team's secret weapon.</div>
 </div>
-<div class="card" onclick="toast('grill master: reversing wizard','info')">
-<h3>🥩 grill master</h3>
-<div class="role">reverse / forensics</div>
-<div class="desc">Sees assembly in their sleep. Deobfuscates for fun.</div>
-</div>
-<div class="card" onclick="toast('web fry cook: XSS specialist','info')">
-<h3>🍟 fry cook</h3>
-<div class="role">web / misc</div>
-<div class="desc">SSTI is their favorite seasoning. XSS on everything.</div>
+<div class="card crew-card" onclick="toast('yms — the secret sauce','info')">
+<div class="crew-avatar">🥩</div>
+<h3>grill master</h3>
+<div class="role">yms — Crew</div>
+<div class="desc">Reverse engineering and forensics. Decompiles binaries with a smile. Finds needles in haystacks.</div>
 </div>
 </div>
 </section>
@@ -342,7 +340,7 @@ RESP['./menu']='<span class="b">\u{1F354} GRILL COMMANDS:</span>\n<span class="g
 RESP['./burger']='<span class="bun">  ,-\u2018\u2018\u2018\u2018\u2018-.</span>\n<span class="bun"> /  O   O  \\</span>\n<span class="cheese">(  \u203E\u203E\u203E\u203E\u203E  )</span>\n<span class="lettuce"> \\ ....... /</span>\n<span class="tomato">  |       |</span>\n<span class="patty">  | \u2588\u2588\u2588\u2588\u2588 |</span>\n<span class="bun">  \u2018-------\u2019</span>';
 RESP['./flame']='<span class="r">    (</span>\n<span class="r">   ( )</span>\n<span class="b">  (   )</span>\n<span class="b"> (     )</span>\n<span class="bun">  \u{1F525} GRILL IS HOT \u{1F525}</span>';
 RESP['./special']='<span class="b">\u{1F354} TODAY\'S SPECIAL:</span>\n<span class="bun">The 0-Day Double Stack\u2122</span>\n  \u25B8 Double RCE patty\n  \u25B8 PrivEsc cheese\n  \u25B8 0-day fresh lettuce\n  \u25B8 Crypto secret sauce\n<span class="g">Price: 1 flag</span>  |  <span class="bun">Pairs with: root</span>';
-RESP['./order']='<span class="b">\u{1F4CB} CONTACT:</span>\n<span class="bun">Discord</span>:  discord.gg/0xburger\n<span class="bun">CTFtime</span>:  ctftime.org (0xBURGER)\n<span class="bun">Email</span>:    0xburger@ctf.team';
+RESP['./order']='<span class="b">\u{1F4CB} CONTACT:</span>\n<span class="bun">Discord</span>:  discord.gg/0xburger\n<span class="bun">CTFtime</span>:  ctftime.org (0xBURGER)\n<span class="bun">LinkedIn</span>: linkedin.com/company/109648831\n<span class="bun">Email</span>:    0xburger@ctf.team';
 RESP['whoami']='<span class="b">0xburger CTF Team</span> \u2014 we grill bytes, not beef.';
 RESP['neofetch']='<span class="bun">         \u2554\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2557</span>\n<span class="bun">         \u2551 </span><span class="b">\u{1F354} 0xburger</span><span class="bun"> \u2551</span>\n<span class="bun">         \u255A\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255D</span>\n<span class="g">OS:</span>       BurgerOS 2026.1\n<span class="g">Shell:</span>    zsh 5.9\n<span class="g">Uptime:</span>   forever\n<span class="g">Theme:</span>    dark-roasted';
 RESP['flag']='<span class="b">\u{1F3F4} CTF{0xburg3r_1s_s3rv1ng_fl4gs}</span>';
@@ -365,5 +363,19 @@ setTimeout(runDemo,600);
 var CTFTIME_TEAM_ID=null;
 if(CTFTIME_TEAM_ID){(async function(){try{var r=await fetch('https://ctftime.org/api/v1/teams/'+CTFTIME_TEAM_ID+'/');var d=await r.json();var set=function(id,v){var el=document.getElementById(id);el.classList.remove('loading');el.textContent=v};if(d.rating){var cr=d.rating.country_place||'--';set('stat-rank','#'+cr);var gr=d.rating['2026']?.rating_place||'--';set('stat-global','#'+gr);set('stat-points',(d.rating['2026']?.rating_points||0).toFixed(2));set('stat-events',d.rating['2026']?.rating_events||'0');document.getElementById('bar-rank').style.width=Math.max(3,100-Math.min(97,(cr/800)*100))+'%';document.getElementById('bar-global').style.width=Math.max(3,100-Math.min(97,(gr/3000)*100))+'%';document.getElementById('bar-points').style.width=Math.min(100,((d.rating['2026']?.rating_points||0)/500)*100)+'%';document.getElementById('bar-events').style.width=Math.min(100,((d.rating['2026']?.rating_events||0)/30)*100)+'%'}}catch(e){}})()}
 </script>
+
+<div class="container">
+<footer class="footer">
+<p style="color:var(--accent);font-size:12px;letter-spacing:2px;margin-bottom:12px">🍔 CONNECT WITH 0xBURGER</p>
+<div class="footer-links">
+<a class="footer-link" href="https://discord.gg/0xburger" target="_blank">💬 Discord</a>
+<a class="footer-link" href="https://ctftime.org" target="_blank">🏴 CTFtime</a>
+<a class="footer-link" href="https://www.linkedin.com/company/109648831/" target="_blank">🔗 LinkedIn</a>
+<a class="footer-link" href="mailto:0xburger@ctf.team">📧 Email</a>
+</div>
+<p class="footer-credit">0xBURGER &mdash; grill bytes, not beef 🍔</p>
+</footer>
+</div>
+
 </body>
 </html>
