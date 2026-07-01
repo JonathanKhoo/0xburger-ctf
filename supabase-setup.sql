@@ -37,5 +37,57 @@ CREATE POLICY "admin_update" ON site_content FOR UPDATE
 CREATE POLICY "admin_delete" ON site_content FOR DELETE
   USING (auth.jwt() -> 'app_metadata' ->> 'role' IN ('admin','superadmin'));
 
--- 3. Disable public sign-ups (run this in SQL Editor)
+-- 3. Writeup document uploads
+INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+VALUES (
+  'writeups',
+  'writeups',
+  true,
+  15728640,
+  ARRAY[
+    'application/pdf',
+    'text/markdown',
+    'text/plain',
+    'application/msword',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+  ]
+)
+ON CONFLICT (id) DO UPDATE SET
+  public = EXCLUDED.public,
+  file_size_limit = EXCLUDED.file_size_limit,
+  allowed_mime_types = EXCLUDED.allowed_mime_types;
+
+DO $$ BEGIN
+  DROP POLICY IF EXISTS "writeups_public_read" ON storage.objects;
+  DROP POLICY IF EXISTS "writeups_admin_insert" ON storage.objects;
+  DROP POLICY IF EXISTS "writeups_admin_update" ON storage.objects;
+  DROP POLICY IF EXISTS "writeups_admin_delete" ON storage.objects;
+END $$;
+
+CREATE POLICY "writeups_public_read" ON storage.objects FOR SELECT
+  USING (bucket_id = 'writeups');
+
+CREATE POLICY "writeups_admin_insert" ON storage.objects FOR INSERT
+  WITH CHECK (
+    bucket_id = 'writeups'
+    AND auth.jwt() -> 'app_metadata' ->> 'role' IN ('admin','superadmin')
+  );
+
+CREATE POLICY "writeups_admin_update" ON storage.objects FOR UPDATE
+  USING (
+    bucket_id = 'writeups'
+    AND auth.jwt() -> 'app_metadata' ->> 'role' IN ('admin','superadmin')
+  )
+  WITH CHECK (
+    bucket_id = 'writeups'
+    AND auth.jwt() -> 'app_metadata' ->> 'role' IN ('admin','superadmin')
+  );
+
+CREATE POLICY "writeups_admin_delete" ON storage.objects FOR DELETE
+  USING (
+    bucket_id = 'writeups'
+    AND auth.jwt() -> 'app_metadata' ->> 'role' IN ('admin','superadmin')
+  );
+
+-- 4. Disable public sign-ups (run this in SQL Editor)
 -- ALTER ROLE authenticator SET pgrst.jwt_role_claim_key = 'app_metadata';
