@@ -8,8 +8,8 @@ Requirements:
   pip install supabase
 
 Environment variables (set before running):
-  SUPABASE_URL=https://srabdolyckacsxmyiwuv.supabase.co
-  SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOi...  (found in Supabase Dashboard > Settings > API > service_role)
+  SUPABASE_URL=https://YOUR_PROJECT.supabase.co
+  SUPABASE_SERVICE_ROLE_KEY=<service role secret from Supabase Dashboard > Settings > API>
 
 This creates an admin user with app_metadata.role='admin'.
 The admin user CANNOT be created via the public website sign-up.
@@ -18,11 +18,11 @@ import os
 import sys
 from supabase import create_client
 
-url = os.environ.get("SUPABASE_URL") or "https://srabdolyckacsxmyiwuv.supabase.co"
+url = os.environ.get("SUPABASE_URL")
 service_key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
 
-if not service_key:
-    print("ERROR: Set SUPABASE_SERVICE_ROLE_KEY environment variable.")
+if not url or not service_key:
+    print("ERROR: Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY environment variables.")
     print("Find it at: Supabase Dashboard > Settings > API > service_role secret")
     sys.exit(1)
 

@@ -1,0 +1,4 @@
+project_id = "srabdolyckacsxmyiwuv"
+
+[functions.check-flag]
+verify_jwt = false

@@ -21,6 +21,9 @@ DO $$ BEGIN
   DROP POLICY IF EXISTS "auth_write" ON site_content;
   DROP POLICY IF EXISTS "auth_update" ON site_content;
   DROP POLICY IF EXISTS "auth_delete" ON site_content;
+  DROP POLICY IF EXISTS "admin_insert" ON site_content;
+  DROP POLICY IF EXISTS "admin_update" ON site_content;
+  DROP POLICY IF EXISTS "admin_delete" ON site_content;
 END $$;
 
 -- Public can read (site visitors)
@@ -89,5 +92,27 @@ CREATE POLICY "writeups_admin_delete" ON storage.objects FOR DELETE
     AND auth.jwt() -> 'app_metadata' ->> 'role' IN ('admin','superadmin')
   );
 
--- 4. Disable public sign-ups (run this in SQL Editor)
+-- 4. Hidden flag submission logs
+CREATE TABLE IF NOT EXISTS flag_submissions (
+  id BIGSERIAL PRIMARY KEY,
+  category TEXT,
+  correct BOOLEAN NOT NULL DEFAULT false,
+  submitted_hash TEXT NOT NULL,
+  user_agent TEXT,
+  ip_hint TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+ALTER TABLE flag_submissions ENABLE ROW LEVEL SECURITY;
+
+DO $$ BEGIN
+  DROP POLICY IF EXISTS "flag_submissions_admin_read" ON flag_submissions;
+END $$;
+
+CREATE POLICY "flag_submissions_admin_read" ON flag_submissions FOR SELECT
+  USING (auth.jwt() -> 'app_metadata' ->> 'role' IN ('admin','superadmin'));
+
+-- Inserts are done by the Edge Function with the service role key.
+
+-- 5. Disable public sign-ups (run this in SQL Editor)
 -- ALTER ROLE authenticator SET pgrst.jwt_role_claim_key = 'app_metadata';

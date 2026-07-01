@@ -2,3 +2,14 @@
 package-lock.json
 ref_lv1x.html
 ref_nopalinto.html
+
+# Local/private admin config
+admin-config.json
+admin-config.*.json
+!admin-config.example.json
+
+# Local Supabase deploy secrets
+supabase-secrets.local.ps1
+
+# Supabase CLI local state
+supabase/.temp/
