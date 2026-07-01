@@ -36,6 +36,12 @@ supabase secrets set --project-ref YOUR_PROJECT_REF FLAG_HASHES_JSON='<private-j
 
 Run `supabase-setup.sql` in the SQL Editor so `flag_submissions` exists.
 
+On Netlify, set this environment variable so the public browser calls only the same-origin Netlify Function:
+
+```text
+FLAG_CHECK_URL=https://YOUR_PROJECT.supabase.co/functions/v1/check-flag
+```
+
 ## Security Headers
 
 `index.html` includes a meta CSP and referrer policy for GitHub Pages.

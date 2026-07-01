@@ -3,11 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; connect-src 'self' https://srabdolyckacsxmyiwuv.supabase.co; img-src 'self' data: https:; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self' data: https:; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>0xburger — order up</title>
-<link rel="stylesheet" href="assets/styles.css?v=20260701-security">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="stylesheet" href="assets/styles.css?v=20260701-public">
 </head>
 <body>
 <canvas id="particle-canvas"></canvas>
@@ -15,11 +14,11 @@
 <div id="toast-container"></div>
 <div class="container">
 <header>
-<div class="brand-lockup" id="burgerLogo" onclick="logoGlitch()" aria-label="0xBURGER mark">
+<div class="brand-lockup" id="burgerLogo" aria-label="0xBURGER mark">
 <div class="brand-mark"><span></span><span></span><span></span><span></span><span></span></div>
 <div class="brand-code">0x425552474552</div>
 </div>
-<h1 class="team-name" id="teamName" onclick="titleGlitch()">0xBURGER</h1>
+<h1 class="team-name" id="teamName">0xBURGER</h1>
 <p class="tagline"><span class="bracket">[</span> Malaysia CTF crew · grill bytes, not beef <span class="bracket">]</span></p>
 </header>
 <nav>
@@ -43,9 +42,9 @@
 <div class="terminal">
 <div class="term-header">
 <div class="term-dots">
-<div class="term-dot r" onclick="toast('Red dot? Rare patty.','info')" title="minimize"></div>
-<div class="term-dot y" onclick="toast('Yellow dot? Cheese activated.','info')" title="maximize"></div>
-<div class="term-dot g" onclick="clearTerminal()" title="clear"></div>
+<div class="term-dot r" title="minimize"></div>
+<div class="term-dot y" title="maximize"></div>
+<div class="term-dot g" title="clear"></div>
 </div>
 <div class="term-title">grill@0xburger:~</div>
 </div>
@@ -53,33 +52,33 @@
 <div class="term-cursor" id="termCursor"></div>
 </div>
 <div class="cmd-bar">
-<button class="cmd-btn" onclick="runCmd('./menu')">./menu</button>
-<button class="cmd-btn" onclick="runCmd('./burger')">./burger</button>
-<button class="cmd-btn" onclick="runCmd('./special')">./special</button>
-<button class="cmd-btn" onclick="runCmd('./submit')">./submit</button>
-<button class="cmd-btn" onclick="runCmd('./flame')">./flame</button>
-<button class="cmd-btn" onclick="runCmd('neofetch')">neofetch</button>
-<button class="cmd-btn" onclick="runCmd('./order')">./order</button>
-<button class="cmd-btn clear" onclick="runCmd('./clear')">./clear</button>
-<button class="cmd-btn replay" onclick="runDemo()">\u27F3 replay</button>
+<button class="cmd-btn">./menu</button>
+<button class="cmd-btn">./burger</button>
+<button class="cmd-btn">./special</button>
+<button class="cmd-btn">./submit</button>
+<button class="cmd-btn">./flame</button>
+<button class="cmd-btn">neofetch</button>
+<button class="cmd-btn">./order</button>
+<button class="cmd-btn clear">./clear</button>
+<button class="cmd-btn replay">\u27F3 replay</button>
 </div>
 <div class="stat-grid reveal">
-<div class="stat-card" data-tilt onclick="openCtftimeStat(this)">
+<div class="stat-card" data-tilt>
 <div class="stat-num loading" id="stat-rank">...</div>
 <div class="stat-label">country rank</div>
 <div class="stat-bar"><div class="stat-bar-fill" id="bar-rank"></div></div>
 </div>
-<div class="stat-card" data-tilt onclick="openCtftimeStat(this)">
+<div class="stat-card" data-tilt>
 <div class="stat-num loading" id="stat-global">...</div>
 <div class="stat-label">best rank</div>
 <div class="stat-bar"><div class="stat-bar-fill" id="bar-global"></div></div>
 </div>
-<div class="stat-card" data-tilt onclick="openCtftimeStat(this)">
+<div class="stat-card" data-tilt>
 <div class="stat-num loading" id="stat-points">...</div>
 <div class="stat-label">country</div>
 <div class="stat-bar"><div class="stat-bar-fill" id="bar-points"></div></div>
 </div>
-<div class="stat-card" data-tilt onclick="openCtftimeStat(this)">
+<div class="stat-card" data-tilt>
 <div class="stat-num loading" id="stat-events">...</div>
 <div class="stat-label">team type</div>
 <div class="stat-bar"><div class="stat-bar-fill" id="bar-events"></div></div>
@@ -106,7 +105,7 @@
 </div>
 <div class="ops-grid reveal-scale">
 <div>
-<div class="burger-stack" onclick="burgerClick()">
+<div class="burger-stack" id="burgerStack">
 <div class="burger-layer bun-top">&#127828; TOP BUN</div>
 <div class="burger-layer cheese">&#129472; CHEESE &mdash; crypto</div>
 <div class="burger-layer lettuce">&#129388; LETTUCE &mdash; reverse</div>
@@ -133,25 +132,25 @@
 <span class="status-chip">OPEN FOR SCRIMS</span>
 </div>
 <div class="card-grid crew-grid reveal">
-<div class="card crew-card" onclick="toast('Captain ImJhan ? leading the grill','info')">
+<div class="card crew-card">
 <div class="crew-top"><div class="crew-avatar">&#127828;</div><span class="crew-id">#001</span></div>
-<h3 data-edit="title">ImJhan</h3>
-<div class="role" data-edit="role">Captain / head chef</div>
-<div class="desc" data-edit="desc">Leads solve strategy, binary triage, and the final push when the scoreboard gets spicy.</div>
+<h3>ImJhan</h3>
+<div class="role">Captain / head chef</div>
+<div class="desc">Leads solve strategy, binary triage, and the final push when the scoreboard gets spicy.</div>
 <div class="crew-tags"><span>pwn</span><span>rop</span><span>lead</span></div>
 </div>
-<div class="card crew-card" onclick="toast('Sargent Low Nam Lee ? crypto &amp; recon','info')">
+<div class="card crew-card">
 <div class="crew-top"><div class="crew-avatar">&#129472;</div><span class="crew-id">#002</span></div>
-<h3 data-edit="title">Low Nam Lee</h3>
-<div class="role" data-edit="role">Sargent / sous chef</div>
-<div class="desc" data-edit="desc">Breaks crypto assumptions, maps exposed surfaces, and keeps recon notes sharp.</div>
+<h3>Low Nam Lee</h3>
+<div class="role">Sargent / sous chef</div>
+<div class="desc">Breaks crypto assumptions, maps exposed surfaces, and keeps recon notes sharp.</div>
 <div class="crew-tags"><span>crypto</span><span>osint</span><span>recon</span></div>
 </div>
-<div class="card crew-card" onclick="toast('yms ? the secret sauce','info')">
+<div class="card crew-card">
 <div class="crew-top"><div class="crew-avatar">&#129385;</div><span class="crew-id">#003</span></div>
-<h3 data-edit="title">yms</h3>
-<div class="role" data-edit="role">Crew / grill master</div>
-<div class="desc" data-edit="desc">Turns weird binaries, disk crumbs, and packet smoke into clean solve paths.</div>
+<h3>yms</h3>
+<div class="role">Crew / grill master</div>
+<div class="desc">Turns weird binaries, disk crumbs, and packet smoke into clean solve paths.</div>
 <div class="crew-tags"><span>rev</span><span>forensics</span><span>ghidra</span></div>
 </div>
 </div>
@@ -165,32 +164,32 @@
 <span class="status-chip">NO BLOAT STACK</span>
 </div>
 <div class="stat-grid reveal">
-<div class="stat-card" data-tilt onclick="animateStat(this)">
-<div class="stat-num" style="color:var(--green2)">x86_64</div>
+<div class="stat-card" data-tilt>
+<div class="stat-num" class="stat-green">x86_64</div>
 <div class="stat-label">arch</div>
-<div class="stat-bar"><div class="stat-bar-fill" style="width:80%;background:linear-gradient(90deg,var(--green2),var(--green))"></div></div>
+<div class="stat-bar"><div class="stat-bar-fill bar-green w80"></div></div>
 </div>
-<div class="stat-card" data-tilt onclick="animateStat(this)">
-<div class="stat-num" style="color:var(--blue)">python3</div>
+<div class="stat-card" data-tilt>
+<div class="stat-num" class="stat-blue">python3</div>
 <div class="stat-label">main lang</div>
-<div class="stat-bar"><div class="stat-bar-fill" style="width:65%;background:linear-gradient(90deg,var(--blue),#93c5fd)"></div></div>
+<div class="stat-bar"><div class="stat-bar-fill bar-blue w65"></div></div>
 </div>
-<div class="stat-card" data-tilt onclick="animateStat(this)">
-<div class="stat-num" style="color:var(--red2)">pwntools</div>
+<div class="stat-card" data-tilt>
+<div class="stat-num" class="stat-red">pwntools</div>
 <div class="stat-label">framework</div>
-<div class="stat-bar"><div class="stat-bar-fill" style="width:90%;background:linear-gradient(90deg,var(--red2),var(--red))"></div></div>
+<div class="stat-bar"><div class="stat-bar-fill bar-red w90"></div></div>
 </div>
-<div class="stat-card" data-tilt onclick="animateStat(this)">
-<div class="stat-num" style="color:var(--accent2)">ghidra</div>
+<div class="stat-card" data-tilt>
+<div class="stat-num" class="stat-accent">ghidra</div>
 <div class="stat-label">tool</div>
-<div class="stat-bar"><div class="stat-bar-fill" style="width:75%;background:linear-gradient(90deg,var(--accent2),var(--accent))"></div></div>
+<div class="stat-bar"><div class="stat-bar-fill bar-accent w75"></div></div>
 </div>
 </div>
 <div class="capability-grid reveal-scale">
-<div class="capability"><span>01</span><h3 data-edit="title">Binary counter</h3><p data-edit="desc">Checksec, triage, patch diffing, exploit chain planning.</p></div>
-<div class="capability"><span>02</span><h3 data-edit="title">Web counter</h3><p data-edit="desc">Burp, source review, auth flows, API abuse, browser weirdness.</p></div>
-<div class="capability"><span>03</span><h3 data-edit="title">Crypto counter</h3><p data-edit="desc">Bad randomness, textbook traps, oracle behavior, math notes.</p></div>
-<div class="capability"><span>04</span><h3 data-edit="title">Forensics counter</h3><p data-edit="desc">PCAPs, logs, images, timelines, carved crumbs, repeatable proof.</p></div>
+<div class="capability"><span>01</span><h3>Binary counter</h3><p>Checksec, triage, patch diffing, exploit chain planning.</p></div>
+<div class="capability"><span>02</span><h3>Web counter</h3><p>Burp, source review, auth flows, API abuse, browser weirdness.</p></div>
+<div class="capability"><span>03</span><h3>Crypto counter</h3><p>Bad randomness, textbook traps, oracle behavior, math notes.</p></div>
+<div class="capability"><span>04</span><h3>Forensics counter</h3><p>PCAPs, logs, images, timelines, carved crumbs, repeatable proof.</p></div>
 </div>
 </section>
 <section class="section" id="sec-writeups">
@@ -201,17 +200,17 @@
 </div>
 <span class="status-chip">DISCLOSURE FIRST</span>
 </div>
-<div class="writeup-card" onclick="toast('coming soon: writeups drop after next comp','info')">
+<div class="writeup-card">
 <div class="writeup-icon">01</div>
-<div class="writeup-info"><h4 data-edit="title">Writeups queue</h4><div class="meta" data-edit="desc">crypto &middot; reverse &middot; web &middot; pwn notes being plated</div></div>
+<div class="writeup-info"><h4>Writeups queue</h4><div class="meta">crypto &middot; reverse &middot; web &middot; pwn notes being plated</div></div>
 </div>
-<div class="writeup-card" onclick="toast('private notes stay private until patched','info')">
+<div class="writeup-card">
 <div class="writeup-icon">02</div>
-<div class="writeup-info"><h4 data-edit="title">Disclosure-first publishing</h4><div class="meta" data-edit="desc">no spoilers before organizers and affected services are safe</div></div>
+<div class="writeup-info"><h4>Disclosure-first publishing</h4><div class="meta">no spoilers before organizers and affected services are safe</div></div>
 </div>
-<div class="writeup-card" onclick="toast('format: summary, root cause, exploit, fix','info')">
+<div class="writeup-card">
 <div class="writeup-icon">03</div>
-<div class="writeup-info"><h4 data-edit="title">Writeup format</h4><div class="meta" data-edit="desc">short summary &middot; exact steps &middot; exploit notes &middot; lessons learned</div></div>
+<div class="writeup-info"><h4>Writeup format</h4><div class="meta">short summary &middot; exact steps &middot; exploit notes &middot; lessons learned</div></div>
 </div>
 <div class="archive-note">grill is hot. content cooking. check back later.</div>
 </section>
@@ -226,10 +225,8 @@
 <p class="footer-credit">0xBURGER &mdash; grill bytes, not beef &#127828;</p>
 </footer>
 </div>
-<button class="sound-toggle" id="soundToggle" onclick="toggleSound()" title="toggle sound">🔇</button>
-<div id="adminMount"></div>
-
-<script src="assets/app.js?v=20260701-security"></script>
+<button class="sound-toggle" id="soundToggle" title="toggle sound">🔇</button>
+<script src="assets/app.js?v=20260701-public"></script>
 
 </body>
 </html>
