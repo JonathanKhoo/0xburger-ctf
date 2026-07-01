@@ -19,3 +19,6 @@ live_preview.png
 
 # Private challenge authoring notes
 private/
+
+# Static build output
+dist/
