@@ -3,8 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; connect-src 'self' https://srabdolyckacsxmyiwuv.supabase.co; img-src 'self' data: https:; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <title>0xburger — order up</title>
-<link rel="stylesheet" href="assets/styles.css?v=20260701-flagcheck">
+<link rel="stylesheet" href="assets/styles.css?v=20260701-security">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
@@ -225,10 +227,9 @@
 </footer>
 </div>
 <button class="sound-toggle" id="soundToggle" onclick="toggleSound()" title="toggle sound">🔇</button>
-<button class="admin-btn" id="adminBtn" onclick="handleAdminClick()" title="admin">🔑</button>
 <div id="adminMount"></div>
 
-<script src="assets/app.js?v=20260701-flagcheck"></script>
+<script src="assets/app.js?v=20260701-security"></script>
 
 </body>
 </html>

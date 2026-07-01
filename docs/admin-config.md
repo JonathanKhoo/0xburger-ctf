@@ -22,10 +22,10 @@ That file is ignored by Git.
 
 ## Flag Checker Backend
 
-Deploy the Supabase Edge Function:
+Deploy the Supabase Edge Function without JWT verification. The function enforces origin checks and rate limits itself, because players are anonymous:
 
 ```powershell
-supabase functions deploy check-flag --project-ref YOUR_PROJECT_REF
+supabase functions deploy check-flag --project-ref YOUR_PROJECT_REF --no-verify-jwt
 ```
 
 Set the private flag hashes as a Supabase secret:
@@ -35,6 +35,12 @@ supabase secrets set --project-ref YOUR_PROJECT_REF FLAG_HASHES_JSON='<private-j
 ```
 
 Run `supabase-setup.sql` in the SQL Editor so `flag_submissions` exists.
+
+## Security Headers
+
+`index.html` includes a meta CSP and referrer policy for GitHub Pages.
+
+`_headers` is included for hosts that support static header files, such as Cloudflare Pages or Netlify. GitHub Pages ignores `_headers`, so `Permissions-Policy` and `X-Content-Type-Options` require moving the static frontend behind a host/proxy that can set real HTTP headers.
 
 ## Important GitHub Pages Note
 

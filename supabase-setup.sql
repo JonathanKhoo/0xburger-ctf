@@ -105,6 +105,12 @@ CREATE TABLE IF NOT EXISTS flag_submissions (
 
 ALTER TABLE flag_submissions ENABLE ROW LEVEL SECURITY;
 
+CREATE INDEX IF NOT EXISTS flag_submissions_ip_created_idx
+  ON flag_submissions (ip_hint, created_at DESC);
+
+CREATE INDEX IF NOT EXISTS flag_submissions_correct_created_idx
+  ON flag_submissions (correct, created_at DESC);
+
 DO $$ BEGIN
   DROP POLICY IF EXISTS "flag_submissions_admin_read" ON flag_submissions;
 END $$;

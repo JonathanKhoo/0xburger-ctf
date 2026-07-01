@@ -13,3 +13,9 @@ supabase-secrets.local.ps1
 
 # Supabase CLI local state
 supabase/.temp/
+
+# Local review/screenshot artifacts
+live_preview.png
+
+# Private challenge authoring notes
+private/
