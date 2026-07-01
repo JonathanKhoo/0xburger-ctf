@@ -1,8 +1,10 @@
-﻿# 0xBURGER Hidden Flags Writeup
+# 0xBURGER Hidden Flags — Progressive Hints
 
-This page documents three hidden website mini-challenges. The flags are intentionally not printed here; follow the steps to recover them.
+This is a progressive hint sheet. Stop as soon as you have enough.
 
-## 1) Crypto — Vigenere Sauce
+No plaintext flags are printed here.
+
+## Crypto — Vigenere Sauce
 
 Entry point:
 
@@ -10,9 +12,17 @@ Entry point:
 ./cipher
 ```
 
-The terminal prints a Vigenere ciphertext and hints that the key is the thing every order starts with.
+### Hint 1
+The braces and underscores survive, so this is probably a letter-only substitution or polyalphabetic cipher.
 
-Solve:
+### Hint 2
+The title and website theme matter. The key is not random; it is one of the most repeated words on the page.
+
+### Hint 3
+Try a classic cipher where a repeated keyword shifts each alphabetic character.
+
+### Spoiler Solve
+Use Vigenere decrypt with the site-theme keyword.
 
 ```python
 cipher = "DNW{bmxfhvxi_jbotk_wvspvj_lfu}"
@@ -30,7 +40,7 @@ for ch in cipher:
 print(''.join(out))
 ```
 
-## 2) Misc — Zero-Width Crumbs
+## Misc — Zero-Width Crumbs
 
 Entry point:
 
@@ -38,9 +48,17 @@ Entry point:
 ./crumbs
 ```
 
-The visible text is normal, but the payload is stored in the `data-zero` attribute using zero-width characters.
+### Hint 1
+The output looks too short for a real challenge. Look at the DOM, not just the visible text.
 
-Solve in browser console:
+### Hint 2
+The phrase says some crumbs are too thin to see. Some Unicode characters render with no width.
+
+### Hint 3
+There are two invisible characters. Treat them as binary.
+
+### Spoiler Solve
+Read the hidden attribute and map the two zero-width characters to bits.
 
 ```js
 const z = document.querySelector('#crumbTrail').dataset.zero;
@@ -48,7 +66,7 @@ const bits = [...z].map(c => c === '\u200b' ? '0' : '1').join('');
 console.log(bits.match(/.{8}/g).map(b => String.fromCharCode(parseInt(b, 2))).join(''));
 ```
 
-## 3) Reverse — Patty VM
+## Reverse — Patty VM
 
 Entry point:
 
@@ -56,14 +74,17 @@ Entry point:
 ./patty-vm
 ```
 
-The bytecode uses a tiny stack VM:
+### Hint 1
+The repeating pattern matters more than the individual numbers.
 
-- `1 n`: push byte `n`
-- `2 n`: XOR top of stack with `n`
-- `3 n`: add `n` to top of stack
-- `4`: output top of stack as a character
+### Hint 2
+The first number in each group behaves like an instruction, not data.
 
-Solve:
+### Hint 3
+There are four operations. One loads a byte, two mutate it, one emits it.
+
+### Spoiler Solve
+Interpret the bytecode as a tiny stack VM.
 
 ```python
 code = [
